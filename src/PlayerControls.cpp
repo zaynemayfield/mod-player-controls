@@ -69,6 +69,7 @@ public:
         {
             int positionIndex = 0;
             if (msg == "tb") positionIndex = 1;
+            else if (msg == "tb1") positionIndex = 1;
             else if (msg == "tb2") positionIndex = 2;
             else if (msg == "tb3") positionIndex = 3;
             else if (msg == "tb4") positionIndex = 4;
@@ -187,7 +188,7 @@ private:
         // Add the new position to the front of the deque
         history.push_front(currentPosition);
 
-        // Ensure we only keep the last 4 positions
+        // Ensure we only keep the last 8 positions
         if (history.size() > 8)
         {
             history.pop_back();
@@ -196,23 +197,42 @@ private:
 
     // Teleport to a previous position in the deque
     void TeleportToPreviousPosition(uint64 playerGUID, Player* player, int index)
+{
+    auto it = playerPositionHistory.find(playerGUID);
+    if (it != playerPositionHistory.end() && index <= it->second.size())
     {
-        auto it = playerPositionHistory.find(playerGUID);
-        if (it != playerPositionHistory.end() && index <= it->second.size())
-        {
-            // Save the current location before teleporting
-            SavePlayerPosition(playerGUID, player);
+        // Get the current position before teleporting
+        SavedPosition currentPosition(
+            player->GetMapId(),
+            player->GetPositionX(),
+            player->GetPositionY(),
+            player->GetPositionZ(),
+            player->GetOrientation(),
+            GetPlayerLocationName(player)
+        );
 
-            // Teleport to the requested previous position
-            const SavedPosition& position = it->second[index - 1];
-            player->TeleportTo(position.mapId, position.x, position.y, position.z, position.orientation);
-            ChatHandler(player->GetSession()).SendSysMessage("Teleported to a previous position.");
-        }
-        else
+        // Teleport to the requested previous position
+        const SavedPosition& position = it->second[index - 1];
+        player->TeleportTo(position.mapId, position.x, position.y, position.z, position.orientation);
+
+        // After successful teleportation, add the saved position to the list
+        auto& history = playerPositionHistory[playerGUID];
+        history.push_front(currentPosition);
+
+        // Ensure the list size remains within the limit
+        if (history.size() > 8)
         {
-            ChatHandler(player->GetSession()).SendSysMessage("No position stored for the requested index.");
+            history.pop_back();
         }
+
+        ChatHandler(player->GetSession()).SendSysMessage("Teleported to a previous position.");
     }
+    else
+    {
+        ChatHandler(player->GetSession()).SendSysMessage("No position stored for the requested index.");
+    }
+}
+
 
 
     // List all saved positions for the player
