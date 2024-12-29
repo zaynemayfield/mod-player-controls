@@ -30,3 +30,25 @@ This module provides a set of player utility commands, including teleportation, 
    ```bash
    cd path/to/azerothcore/modules
    git clone https://github.com/zaynemayfield/mod-player-controls.git
+2. cd path/to/azerothcore/build
+   cmake ..
+   make -j$(nproc)
+3. Restart your AzerothCore server.
+
+# Usage
+
+Enable the module by restarting the server.
+Use the commands in the in-game chat.
+
+# Configuration
+
+No configuration file is required. The module uses predefined locations from the game_tele table.
+
+# Compatibility
+
+Tested with AzerothCore 3.3.5a.
+Requires the game_tele table for teleportation locations.
+
+# License
+
+This module is licensed under the GNU AGPLv3.
