@@ -1,3 +1,4 @@
+
 // /*
 //  * Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 //  */
@@ -54,6 +55,7 @@ public:
                 "- tb list: List all saved positions with location names.\n"
                 "- tb2, tb3, ..., tb8: Teleport to earlier saved positions (up to 8).\n"
                 "- app <playername>: Teleport to another player's location.\n"
+                "- s1-4: Changes player's speed. s1 is normal s4 is 4x speed.\n"
                 "- pc help: Display this help message.\n";
 
             ChatHandler(player->GetSession()).SendSysMessage(helpMessage.c_str());
@@ -131,6 +133,23 @@ public:
             {
                 ChatHandler(player->GetSession()).SendSysMessage("Player not found or not online.");
             }
+        }
+        // Handle speed modification
+        else if (msg == "s1")
+        {
+            player->SetSpeed(MOVE_RUN, 1.0f, true);
+        }
+        else if (msg == "s2")
+        {
+            player->SetSpeed(MOVE_RUN, 2.0f, true);
+        }
+        else if (msg == "s3")
+        {
+            player->SetSpeed(MOVE_RUN, 3.0f, true);
+        }
+        else if (msg == "s4")
+        {
+            player->SetSpeed(MOVE_RUN, 4.0f, true);
         }
 
     }
