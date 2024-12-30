@@ -64,7 +64,7 @@ public:
         {
             ListPlayerPositions(playerGUID, player);
         }
-        else if (msg == "tb" || msg == "tb2" || msg == "tb3" || msg == "tb4" ||
+        else if (msg == "tb" || msg == "tb1" || msg == "tb2" || msg == "tb3" || msg == "tb4" ||
                  msg == "tb5" || msg == "tb6" || msg == "tb7" || msg == "tb8")
         {
             int positionIndex = 0;
